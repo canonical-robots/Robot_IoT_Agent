@@ -1,0 +1,17 @@
+version: '3'
+services:
+  elfin-adapter: # Specify the name you want for your container
+    image: elfin-adapter # Specify the image name for your Node.js application
+    ports:
+      - "3000:3000" # Replace YOUR_APP_PORT with the desired port number for your app
+    #environment:
+     # - ELFIN_SERVER_HOST=mongo  # Update this if needed
+     # - ELFIN_SERVER_PORT=2500   # Update this if needed
+     # - NGSI_ENTITY_ID=ElfinRobot001   # Update this if needed
+     # - NGSI_ENTITY_TYPE=ElfinRobot   # Update this if needed
+    networks:
+          - my_custom_network
+
+networks:
+  my_custom_network:
+    external: true

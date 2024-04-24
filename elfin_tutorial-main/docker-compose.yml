@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  
+  mongo:
+    image: mongo:4.4
+    command: --nojournal
+    networks:
+      - my_custom_network        
+  
+  orion:
+    image: quay.io/fiware/orion-ld:1.4.0
+    links:
+      - mongo
+    ports:
+      - "1026:1026"
+    command: -dbhost mongo
+    networks:
+      - my_custom_network
+  
+  elfin_emulator: # Specify the name you want for your container
+    image: elfin_emulator # Specify the image name for your Node.js application
+    ports:
+      - "2500:2500" # Replace YOUR_APP_PORT with the desired port number for your app
+    networks:
+      - my_custom_network
+
+networks:
+  my_custom_network:
+    external: true    

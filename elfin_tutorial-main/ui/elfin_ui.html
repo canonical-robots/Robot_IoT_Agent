@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elfin UI</title>
+    <style>
+        /* Add your CSS styles here if needed */
+        body {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .widget {
+            flex: 1;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+
+        .json-widget {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Widget 1: Display JSON Object -->
+    <div class="widget json-widget">
+        <h2>Elfin NGSI Entity</h2>
+        <pre id="json-view">
+            <!-- JSON content will be inserted here -->
+        </pre>
+    </div>
+
+    <!-- Widget 2: Display Key-Value Pairs -->
+    <div class="widget">
+        <h2>Detail (Actual_PCS_TCP)</h2>
+        <pre id="actual_PCS_TCP-view">
+            <!-- JSON content will be inserted here -->
+        </pre>
+    </div>
+
+    <!-- Widget 3: Buttons for HTTP Requests -->
+    <div class="widget">
+        <h2>UI Commands to Elfin</h2>
+        <button id="send-request-button1">STOP Command</button>
+        <button id="send-request-button2">MOVE Command</button>
+    </div>
+
+    <script>
+        // JavaScript code to manipulate the widgets goes here
+        // You can use JavaScript to update the content and functionality of these widgets
+
+        // Function to update JSON view with data from the server
+        function updateJSONView() {
+            fetch('/elfin_entity')
+                .then(response => response.json())
+                .then(data => {
+                    const jsonView = document.getElementById('json-view');
+                    if (Object.prototype.hasOwnProperty.call(data, "command_status"))
+                    { 
+                        console.log(data);
+                        data.command_status.value = decodeURIComponent(atob(data.command_status.value));
+                        data.command_info.value = decodeURIComponent(atob(data.command_info.value));
+                    }
+                    jsonView.textContent = JSON.stringify(data, undefined, 2);
+                    const detailJsonView = document.getElementById('actual_PCS_TCP-view');
+                    detailJsonView.textContent = JSON.stringify(data["Actual_PCS_TCP"], undefined, 2);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+        // Update JSON view initially
+        updateJSONView();
+
+        // Poll for updates every 250 milliseconds)
+        setInterval(updateJSONView, 250);
+          // Get a reference to the button element using its id
+        const stopButton = document.getElementById('send-request-button1');
+        const moveButton = document.getElementById('send-request-button2');
+
+        // Define a function to be executed when the button is clicked
+        function handleStopButtonClick() {
+            // Your code to handle the button click goes here
+            fetch('/command', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "command": "stop"
+            }),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                // Handle the response from the server
+                console.log('Response from server:', data);
+            })
+            .catch((error) => {
+                console.error('Error sending POST request:', error);
+            });
+        }
+        // Define a function to be executed when the button is clicked
+        function handleMoveButtonClick() {
+            // Your code to handle the button click goes here
+            fetch('/command', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "command": "move"
+            }),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                // Handle the response from the server
+                console.log('Response from server:', data);
+            })
+            .catch((error) => {
+                console.error('Error sending POST request:', error);
+            });
+        }
+
+        // Attach the function to the button's click event
+        stopButton.addEventListener('click', handleStopButtonClick);
+        moveButton.addEventListener('click', handleMoveButtonClick);
+       
+    </script>
+</body>
+</html>

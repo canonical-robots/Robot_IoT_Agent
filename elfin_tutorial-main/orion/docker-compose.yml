@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  
+  mongo:
+    image: mongo:4.4
+    command: --nojournal
+    networks:
+      - my_custom_network        
+  
+  orion:
+    image: quay.io/fiware/orion-ld:1.4.0
+    links:
+      - mongo
+    ports:
+      - "1026:1026"
+    command: -dbhost mongo
+    networks:
+      - my_custom_network
+
+networks:
+  my_custom_network:
+    external: true    
+

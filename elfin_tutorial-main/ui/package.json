@@ -1,0 +1,17 @@
+{
+  "name": "elfin_tutorial_ui",
+  "version": "1.0.0",
+  "description": "Description of your app",
+  "main": "elfin_ui_server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "ngsijs": "latest",
+    "express": "latest"
+  }
+}
+
+

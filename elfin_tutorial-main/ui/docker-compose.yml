@@ -1,0 +1,12 @@
+version: '3'
+services:
+  elfin-tutorial-ui: # Specify the name you want for your container
+    image: elfin-tutorial-ui # Specify the image name for your Node.js application
+    ports:
+      - "3003:3003" # Replace YOUR_APP_PORT with the desired port number for your app
+    networks:
+          - my_custom_network
+
+networks:
+  my_custom_network:
+    external: true

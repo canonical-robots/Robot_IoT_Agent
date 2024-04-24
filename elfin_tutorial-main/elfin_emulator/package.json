@@ -1,0 +1,13 @@
+{
+  "name": "elfin_emulator",
+  "version": "1.0.0",
+  "description": "Your Node.js Express application",
+  "main": "elfin_emulator.js",  
+  "scripts": {
+    "start": "node elfin_emulator.js"
+  },
+  "dependencies": {
+    "net": "latest"
+  }
+}
+
